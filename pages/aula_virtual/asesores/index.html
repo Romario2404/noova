@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es-PE" data-theme="azul-corporativo" data-mode="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a4b7a">
+  <title>Dashboard Asesor - NOOVA S.A.C.</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js">
+  <link rel="stylesheet" href="../../../assets/css/theme.css">
+  <link rel="stylesheet" href="../../../assets/css/main.css">
+  <style>
+    .portal-layout { display: flex; min-height: 100vh; }
+    .portal-sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: 280px; background: var(--theme-sidebar-bg); z-index: 1000; display: flex; flex-direction: column; overflow-y: auto; }
+    .portal-sidebar-header { padding: 24px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 12px; }
+    .portal-sidebar-header i { font-size: 1.6rem; color: var(--theme-accent); }
+    .portal-sidebar-header h2 { color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.15rem; font-weight: 700; }
+    .portal-sidebar-nav { flex: 1; padding: 16px 12px; }
+    .portal-sidebar-nav a { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: var(--theme-sidebar-text); font-size: 0.9rem; font-weight: 500; border-radius: 12px; transition: all 0.3s ease; margin-bottom: 2px; }
+    .portal-sidebar-nav a:hover, .portal-sidebar-nav a.active { background: rgba(255,255,255,0.1); color: #fff; }
+    .portal-sidebar-nav a.active { background: var(--theme-sidebar-active); }
+    .portal-sidebar-nav a i { width: 20px; text-align: center; font-size: 1rem; }
+    .portal-sidebar-footer { padding: 16px 12px; border-top: 1px solid rgba(255,255,255,0.08); }
+    .portal-sidebar-footer a { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: var(--theme-sidebar-text); font-size: 0.9rem; font-weight: 500; border-radius: 12px; transition: all 0.3s ease; cursor: pointer; }
+    .portal-sidebar-footer a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .portal-main { margin-left: 280px; flex: 1; background: var(--theme-bg); min-height: 100vh; }
+    .portal-topbar { display: flex; align-items: center; justify-content: space-between; padding: 20px 32px; background: var(--theme-surface); border-bottom: 1px solid var(--theme-border); }
+    .portal-topbar h1 { font-size: 1.3rem; font-weight: 700; }
+    .portal-topbar-actions { display: flex; align-items: center; gap: 12px; }
+    .portal-content { padding: 32px; max-width: 1400px; }
+    @media (max-width: 768px) { .portal-sidebar { transform: translateX(-100%); } .portal-sidebar.open { transform: translateX(0); } .portal-main { margin-left: 0; } .portal-content { padding: 20px; } }
+    .section-content { display: none; }
+    .section-content.active { display: block; animation: fadeIn 0.3s ease; }
+    .action-btn { background: transparent; border: 1px solid var(--theme-border); border-radius: 6px; padding: 0.35rem 0.6rem; cursor: pointer; color: var(--theme-text-light); font-size: 0.8rem; transition: all 0.2s; }
+    .action-btn:hover { background: var(--theme-hover); color: var(--theme-text); }
+    .action-btn + .action-btn { margin-left: 0.3rem; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+  <div class="portal-layout">
+    <aside class="portal-sidebar">
+      <div class="portal-sidebar-header">
+        <i class="fas fa-chalkboard-teacher"></i>
+        <h2>Asesor NOOVA</h2>
+      </div>
+      <nav class="portal-sidebar-nav">
+        <a href="#" class="active" data-section="dashboard"><i class="fas fa-th-large"></i> Dashboard</a>
+        <a href="#" data-section="solicitudes"><i class="fas fa-inbox"></i> Solicitudes <span id="solicitudesBadge" style="margin-left:auto;background:#dc3545;color:#fff;font-size:0.7rem;padding:2px 8px;border-radius:10px;display:none;">0</span></a>
+        <a href="#" data-section="proyectos"><i class="fas fa-folder-open"></i> Proyectos</a>
+        <a href="#" data-section="clientes"><i class="fas fa-users"></i> Mis Clientes</a>
+        <a href="#" data-section="perfil"><i class="fas fa-user-cog"></i> Mi Perfil</a>
+      </nav>
+      <div class="portal-sidebar-footer">
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+      </div>
+    </aside>
+
+    <div class="portal-main">
+      <header class="portal-topbar">
+        <h1>Panel del Asesor - <span id="asesorName">[Nombre]</span></h1>
+        <div class="portal-topbar-actions">
+          <button class="btn-icon" onclick="alert('Notificaciones pendientes')"><i class="fas fa-bell"></i></button>
+        </div>
+      </header>
+
+      <div class="portal-content">
+
+        <!-- DASHBOARD -->
+        <div class="section-content active" id="section-dashboard">
+          <div class="dashboard-grid" id="statsGrid"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px;">
+            <div class="chart-container">
+              <h3>Proyectos por Estado</h3>
+              <canvas id="advisorChart" style="max-height:280px;"></canvas>
+            </div>
+            <div class="chart-container">
+              <h3>Notificaciones Recientes</h3>
+              <div id="recentNotifs"><div style="color:var(--theme-text-light);padding:1rem;">Cargando...</div></div>
+            </div>
+          </div>
+          <div class="table-container">
+            <table class="table">
+              <thead><tr><th>Cliente</th><th>Empresa</th><th>Proyecto</th><th>Estado</th><th>Avance</th></tr></thead>
+              <tbody id="dashboardProyTable"><tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--theme-text-light)">Cargando...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SOLICITUDES -->
+        <div class="section-content" id="section-solicitudes">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+            <div><h2 style="margin:0;font-size:1.3rem;"><i class="fas fa-inbox"></i> Solicitudes de Proyecto</h2><p style="margin:0.25rem 0 0;color:var(--theme-text-secondary);font-size:0.875rem;">Gestiona las solicitudes de proyectos de los clientes</p></div>
+            <div style="display:flex;gap:8px;">
+              <select id="solicitudFilter" onchange="cargarSolicitudes()" style="padding:0.5rem;border:1px solid var(--theme-border);border-radius:8px;background:var(--theme-card-bg);color:var(--theme-text);font-size:0.85rem;">
+                <option value="">Todas</option>
+                <option value="pendiente">Pendientes</option>
+                <option value="aprobado">Aprobadas</option>
+                <option value="rechazado">Rechazadas</option>
+              </select>
+            </div>
+          </div>
+          <div id="solicitudesList"><div style="color:var(--theme-text-light);padding:1rem;">Cargando...</div></div>
+        </div>
+
+        <!-- PROYECTOS -->
+        <div class="section-content" id="section-proyectos">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+            <div><h2 style="margin:0;font-size:1.3rem;"><i class="fas fa-folder-open"></i> Proyectos</h2><p style="margin:0.25rem 0 0;color:var(--theme-text-secondary);font-size:0.875rem;">Proyectos donde participas</p></div>
+          </div>
+          <div class="table-container">
+            <table class="table">
+              <thead><tr><th>Código</th><th>Nombre</th><th>Cliente</th><th>Estado</th><th>Avance</th><th>Inicio</th><th>Acciones</th></tr></thead>
+              <tbody id="proyectosBody"><tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--theme-text-light)">Cargando...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- CLIENTES -->
+        <div class="section-content" id="section-clientes">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+            <div><h2 style="margin:0;font-size:1.3rem;"><i class="fas fa-users"></i> Mis Clientes</h2><p style="margin:0.25rem 0 0;color:var(--theme-text-secondary);font-size:0.875rem;">Clientes que te han asignado solicitudes</p></div>
+          </div>
+          <div id="clientesList"><div style="color:var(--theme-text-light);padding:1rem;">Cargando...</div></div>
+        </div>
+
+        <!-- PERFIL -->
+        <div class="section-content" id="section-perfil">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+            <div><h2 style="margin:0;font-size:1.3rem;"><i class="fas fa-user-cog"></i> Mi Perfil</h2><p style="margin:0.25rem 0 0;color:var(--theme-text-secondary);font-size:0.875rem;">Información de tu cuenta</p></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 2fr;gap:24px;">
+            <div class="chart-container" style="text-align:center;padding:2rem;">
+              <div style="width:100px;height:100px;border-radius:50%;background:var(--theme-primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:2.5rem;font-weight:700;margin:0 auto 1rem;" id="perfilAvatar">A</div>
+              <h3 id="perfilNombre" style="margin:0 0 0.25rem;">Asesor</h3>
+              <p id="perfilEmail" style="color:var(--theme-text-light);font-size:0.85rem;margin:0;">asesor@noova.com</p>
+            </div>
+            <div class="chart-container">
+              <h3>Información de la Cuenta</h3>
+              <div id="perfilInfo"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL RESPUESTA -->
+  <div id="respuestaModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:var(--theme-card-bg);border-radius:20px;padding:32px;max-width:500px;width:90%;max-height:90vh;overflow-y:auto;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <h3 style="margin:0;" id="modalTitle">Responder Solicitud</h3>
+        <button onclick="cerrarModal()" style="background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--theme-text-light);">&times;</button>
+      </div>
+      <div id="modalInfo" style="margin-bottom:16px;padding:12px;background:var(--theme-surface);border-radius:10px;"></div>
+      <div class="form-group">
+        <label>Tu respuesta</label>
+        <textarea id="respuestaText" rows="4" placeholder="Escribe tu respuesta o comentarios..." style="width:100%;padding:10px;border:1px solid var(--theme-border);border-radius:8px;background:var(--theme-input-bg);color:var(--theme-text);font-family:inherit;resize:vertical;"></textarea>
+      </div>
+      <div style="display:flex;gap:12px;">
+        <button onclick="responderSolicitud('aprobado')" style="flex:1;padding:0.7rem;background:#28a745;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;"><i class="fas fa-check"></i> Aprobar</button>
+        <button onclick="responderSolicitud('rechazado')" style="flex:1;padding:0.7rem;background:#dc3545;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;"><i class="fas fa-times"></i> Rechazar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
+  <script>window.BASE_PATH = '../../../';</script>
+  <script src="../../../assets/js/theme.js"></script>
+  <script>
+    ThemeManager.init();
+
+    /* === BASE DE DATOS LOCAL === */
+    function db(key, val) {
+      if (val !== undefined) { localStorage.setItem('noova_' + key, JSON.stringify(val)); return val; }
+      try { return JSON.parse(localStorage.getItem('noova_' + key)); } catch { return null; }
+    }
+    function getUsers() { return db('users') || []; }
+    function getSolicitudes() { return db('solicitudes') || []; }
+    function getProyectos() { return db('proyectos') || []; }
+    function getNotifs() { return db('notificaciones') || []; }
+    function nextId(arr) { return arr.length ? Math.max.apply(null, arr.map(function(x) { return x.id; })) + 1 : 1; }
+    function setSolicitudes(v) { db('solicitudes', v); }
+    function setProyectos(v) { db('proyectos', v); }
+    function setNotifs(v) { db('notificaciones', v); }
+
+    var currentUser = db('currentUser');
+    if (!currentUser) { window.location.href = '../'; }
+
+    function logout() {
+      db('currentUser', null);
+      window.location.href = '../';
+    }
+
+    function formatDate(d) {
+      if (!d) return '-';
+      var dt = new Date(d);
+      return dt.toLocaleDateString('es-PE', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    /* === SECTION SWITCHING === */
+    function showSection(name) {
+      document.querySelectorAll('.section-content').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.portal-sidebar-nav a[data-section]').forEach(function(a) { a.classList.remove('active'); });
+      var section = document.getElementById('section-' + name);
+      if (section) section.classList.add('active');
+      var link = document.querySelector('.portal-sidebar-nav a[data-section="' + name + '"]');
+      if (link) link.classList.add('active');
+      if (!section.dataset.loaded) { section.dataset.loaded = '1'; loaders[name] && loaders[name](); }
+    }
+
+    document.querySelectorAll('.portal-sidebar-nav a[data-section]').forEach(function(a) {
+      a.addEventListener('click', function(e) { e.preventDefault(); showSection(this.dataset.section); });
+    });
+
+    var loaders = {};
+    var chartInstance = null;
+    var solicitudActualId = null;
+
+    loaders.dashboard = function() {
+      document.getElementById('asesorName').textContent = currentUser.nombres || 'Asesor';
+
+      var misSols = getSolicitudes().filter(function(s) { return s.asesor_id === currentUser.id || (s.asesor_id === null); });
+      var pendientes = misSols.filter(function(s) { return s.estado === 'pendiente'; });
+      var aprobadas = misSols.filter(function(s) { return s.estado === 'aprobado'; });
+      var proyectos = getProyectos().filter(function(p) { return p.asesor_email === currentUser.email; });
+      var notifs = getNotifs().filter(function(n) { return n.email === currentUser.email; }).length;
+
+      document.getElementById('statsGrid').innerHTML =
+        '<div class="stat-card"><div class="stat-info"><h4>Solicitudes Pendientes</h4><div class="stat-number">' + pendientes.length + '</div></div><div class="stat-icon"><i class="fas fa-clock"></i></div></div>' +
+        '<div class="stat-card"><div class="stat-info"><h4>Solicitudes Aprobadas</h4><div class="stat-number">' + aprobadas.length + '</div></div><div class="stat-icon"><i class="fas fa-check-circle"></i></div></div>' +
+        '<div class="stat-card"><div class="stat-info"><h4>Proyectos Activos</h4><div class="stat-number">' + proyectos.length + '</div></div><div class="stat-icon"><i class="fas fa-rocket"></i></div></div>' +
+        '<div class="stat-card"><div class="stat-info"><h4>Notificaciones</h4><div class="stat-number">' + notifs + '</div></div><div class="stat-icon"><i class="fas fa-bell"></i></div></div>';
+
+      // Chart
+      if (chartInstance) chartInstance.destroy();
+      var ctx = document.getElementById('advisorChart');
+      if (ctx) {
+        chartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Pendientes', 'Aprobadas', 'Rechazadas', 'Proyectos'],
+            datasets: [{
+              label: 'Cantidad',
+              data: [pendientes.length, aprobadas.length, misSols.filter(function(s) { return s.estado === 'rechazado'; }).length, proyectos.length],
+              backgroundColor: ['#ffc107', '#28a745', '#dc3545', '#0a4b7a'],
+              borderRadius: 6, barThickness: 48
+            }]
+          },
+          options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } }, x: { grid: { display: false } } } }
+        });
+      }
+
+      // Recent notifs
+      var rn = document.getElementById('recentNotifs');
+      var misNotifs = getNotifs().filter(function(n) { return n.email === currentUser.email; });
+      if (misNotifs.length) {
+        rn.innerHTML = misNotifs.slice(0, 4).map(function(n) {
+          return '<div class="notification"><div class="notification-icon" style="background:rgba(10,75,122,0.1);color:var(--theme-primary);"><i class="fas fa-bell"></i></div><div class="notification-content"><div class="notification-title">' + (n.titulo || 'Notificación') + '</div><div class="notification-text">' + (n.mensaje || '') + '</div><div class="notification-time">' + formatDate(n.created_at) + '</div></div></div>';
+        }).join('');
+      } else {
+        rn.innerHTML = '<div style="color:var(--theme-text-light);padding:1rem;text-align:center;">Sin notificaciones</div>';
+      }
+
+      // Projects table
+      var tb = document.getElementById('dashboardProyTable');
+      if (proyectos.length) {
+        tb.innerHTML = proyectos.slice(0, 5).map(function(p) {
+          var badge = p.estado === 'completado' ? 'badge-completed' : p.estado === 'suspendido' ? 'badge-pending' : 'badge-active';
+          var cliente = getUsers().find(function(u) { return u.email === p.cliente_email; });
+          return '<tr><td><strong>' + (cliente ? cliente.nombres + ' ' + cliente.apellidos : p.cliente_email) + '</strong></td><td>' + (cliente ? cliente.razon_social || '-' : '-') + '</td><td>' + (p.nombre || 'Sin nombre') + '</td><td><span class="badge ' + badge + '">' + (p.estado || '-') + '</span></td><td><div class="progress"><div class="progress-bar" style="width:' + (p.progreso || 0) + '%;"></div></div><small>' + (p.progreso || 0) + '%</small></td></tr>';
+        }).join('');
+      } else {
+        tb.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--theme-text-light)">Sin proyectos</td></tr>';
+      }
+    };
+
+    loaders.solicitudes = function() { cargarSolicitudes(); };
+
+    function cargarSolicitudes() {
+      var filtro = document.getElementById('solicitudFilter').value;
+      var todas = getSolicitudes().filter(function(s) { return s.asesor_id === currentUser.id || (s.asesor_id === null); });
+      var data = filtro ? todas.filter(function(s) { return s.estado === filtro; }) : todas;
+      var div = document.getElementById('solicitudesList');
+
+      if (data.length) {
+        div.innerHTML = data.map(function(s) {
+          var icon = s.estado === 'aprobado' ? 'fa-check-circle' : s.estado === 'rechazado' ? 'fa-times-circle' : 'fa-clock';
+          var color = s.estado === 'aprobado' ? '#28a745' : s.estado === 'rechazado' ? '#dc3545' : '#ffc107';
+          var badge = s.estado === 'aprobado' ? 'badge-completed' : s.estado === 'rechazado' ? 'badge' : 'badge-active';
+          var btns = s.estado === 'pendiente' ? '<button class="action-btn" onclick="abrirModal(' + s.id + ')" style="background:var(--theme-primary);color:#fff;border:none;padding:0.3rem 0.7rem;border-radius:6px;"><i class="fas fa-reply"></i> Responder</button>' : '';
+          return '<div style="padding:16px;border:1px solid var(--theme-border);border-radius:12px;margin-bottom:10px;">' +
+            '<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;">' +
+            '<i class="fas ' + icon + '" style="color:' + color + ';font-size:1.2rem;"></i>' +
+            '<strong>' + (s.cliente_nombre || 'Anónimo') + '</strong>' +
+            '<span class="badge badge-active" style="text-transform:capitalize;">' + (s.tipo_proyecto || 'Proyecto') + '</span>' +
+            '<span class="badge ' + badge + '">' + (s.estado || 'pendiente') + '</span></div>' +
+            (s.descripcion ? '<p style="margin:0 0 6px;color:var(--theme-text-secondary);font-size:0.85rem;">' + s.descripcion + '</p>' : '') +
+            '<div style="font-size:0.8rem;color:var(--theme-text-light);"><i class="fas fa-building"></i> ' + (s.razon_social || 'N/A') + ' | RUC: ' + (s.ruc || '-') + ' | ' + formatDate(s.created_at) + '</div>' +
+            (s.respuesta_asesor ? '<div style="margin-top:8px;padding:8px 12px;background:var(--theme-surface);border-radius:8px;font-size:0.85rem;border-left:3px solid ' + color + ';"><strong>Tu respuesta:</strong> ' + s.respuesta_asesor + '</div>' : '') +
+            '<div style="margin-top:10px;">' + btns + '</div></div>';
+        }).join('');
+      } else {
+        div.innerHTML = '<div style="color:var(--theme-text-light);padding:2rem;text-align:center;"><i class="fas fa-inbox" style="font-size:2rem;margin-bottom:8px;display:block;"></i>No hay solicitudes' + (filtro ? ' ' + filtro : '') + '</div>';
+      }
+
+      // Update badge
+      var pendientesCount = todas.filter(function(s) { return s.estado === 'pendiente'; }).length;
+      var badge = document.getElementById('solicitudesBadge');
+      if (pendientesCount > 0) { badge.textContent = pendientesCount; badge.style.display = 'inline'; }
+      else { badge.style.display = 'none'; }
+    }
+
+    function abrirModal(id) {
+      solicitudActualId = id;
+      document.getElementById('respuestaModal').style.display = 'flex';
+      document.getElementById('respuestaText').value = '';
+
+      var sols = getSolicitudes();
+      var s = sols.find(function(x) { return x.id === id; });
+      if (s) {
+        document.getElementById('modalTitle').textContent = 'Responder Solicitud #' + id;
+        document.getElementById('modalInfo').innerHTML = '<strong>' + (s.cliente_nombre || '') + '</strong> - <span class="badge badge-active">' + (s.tipo_proyecto || '') + '</span><p style="margin:8px 0 0;color:var(--theme-text-secondary);font-size:0.85rem;">' + (s.descripcion || 'Sin descripción') + '</p><p style="margin:4px 0 0;font-size:0.8rem;color:var(--theme-text-light);">' + (s.razon_social || '') + ' | RUC: ' + (s.ruc || '-') + '</p>';
+      }
+    }
+
+    function cerrarModal() {
+      document.getElementById('respuestaModal').style.display = 'none';
+      solicitudActualId = null;
+    }
+
+    function responderSolicitud(estado) {
+      if (!solicitudActualId) return;
+
+      var sols = getSolicitudes();
+      var idx = sols.findIndex(function(x) { return x.id === solicitudActualId; });
+      if (idx === -1) { showToast('Solicitud no encontrada', 'error'); return; }
+
+      var respuesta = document.getElementById('respuestaText').value;
+
+      // Update solicitud
+      sols[idx].estado = estado;
+      sols[idx].respuesta_asesor = respuesta;
+      setSolicitudes(sols);
+
+      // If approved, create a project
+      if (estado === 'aprobado') {
+        var proyectos = getProyectos();
+        var nuevoProy = {
+          id: nextId(proyectos),
+          codigo: 'PRY-' + String(Date.now()).slice(-6),
+          nombre: 'Proyecto ' + (sols[idx].tipo_proyecto || '') + ' - ' + (sols[idx].razon_social || 'Cliente'),
+          descripcion: sols[idx].descripcion || '',
+          cliente_email: sols[idx].cliente_email,
+          asesor_email: currentUser.email,
+          tipo: sols[idx].tipo_proyecto || 'otro',
+          estado: 'planificacion',
+          progreso: 0,
+          fecha_inicio: new Date().toISOString(),
+          created_at: new Date().toISOString()
+        };
+        proyectos.push(nuevoProy);
+        setProyectos(proyectos);
+        showToast('Solicitud aprobada y proyecto creado', 'success');
+
+        // Notify cliente
+        var notifs = getNotifs();
+        notifs.push({ id: nextId(notifs), email: sols[idx].cliente_email, tipo: 'proyecto', titulo: 'Solicitud aprobada', mensaje: 'Tu solicitud de ' + sols[idx].tipo_proyecto + ' ha sido aprobada. Proyecto: ' + nuevoProy.codigo, leida: false, created_at: new Date().toISOString(), ref_id: nuevoProy.id });
+        setNotifs(notifs);
+      } else if (estado === 'rechazado') {
+        showToast('Solicitud rechazada');
+
+        // Notify cliente
+        var notifs = getNotifs();
+        notifs.push({ id: nextId(notifs), email: sols[idx].cliente_email, tipo: 'solicitud', titulo: 'Solicitud rechazada', mensaje: respuesta || 'Tu solicitud ha sido rechazada', leida: false, created_at: new Date().toISOString(), ref_id: sols[idx].id });
+        setNotifs(notifs);
+      }
+
+      cerrarModal();
+      cargarSolicitudes();
+    }
+
+    loaders.proyectos = function() {
+      var proyectos = getProyectos().filter(function(p) { return p.asesor_email === currentUser.email; });
+      var tb = document.getElementById('proyectosBody');
+      if (proyectos.length) {
+        tb.innerHTML = proyectos.map(function(p) {
+          var badge = p.estado === 'completado' ? 'badge-completed' : p.estado === 'suspendido' ? 'badge-pending' : 'badge-active';
+          var cliente = getUsers().find(function(u) { return u.email === p.cliente_email; });
+          return '<tr><td><strong>' + (p.codigo || 'PRY-' + p.id) + '</strong></td><td>' + (p.nombre || 'Sin nombre') + '</td><td>' + (cliente ? cliente.nombres + ' ' + cliente.apellidos : p.cliente_email) + '</td><td><span class="badge ' + badge + '">' + (p.estado || '-') + '</span></td><td><div style="width:80px;height:6px;background:var(--theme-border);border-radius:3px;overflow:hidden;"><div style="width:' + (p.progreso || 0) + '%;height:100%;background:var(--theme-primary);border-radius:3px;"></div></div><span style="font-size:0.75rem;">' + (p.progreso || 0) + '%</span></td><td>' + formatDate(p.fecha_inicio) + '</td><td><button class="action-btn" onclick="alert(\'Proyecto: ' + (p.nombre || '') + '\')"><i class="fas fa-eye"></i></button></td></tr>';
+        }).join('');
+      } else {
+        tb.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--theme-text-light)">No hay proyectos</td></tr>';
+      }
+    };
+
+    loaders.clientes = function() {
+      var sols = getSolicitudes().filter(function(s) { return s.asesor_id === currentUser.id; });
+      var emails = sols.map(function(s) { return s.cliente_email; }).filter(function(v, i, a) { return a.indexOf(v) === i; });
+      var div = document.getElementById('clientesList');
+      if (emails.length) {
+        div.innerHTML = emails.map(function(email) {
+          var user = getUsers().find(function(u) { return u.email === email; });
+          var count = sols.filter(function(s) { return s.cliente_email === email; }).length;
+          return '<div style="padding:16px;border:1px solid var(--theme-border);border-radius:12px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;">' +
+            '<div><strong>' + (user ? user.nombres + ' ' + user.apellidos : email) + '</strong>' +
+            (user && user.razon_social ? '<br><span style="font-size:0.85rem;color:var(--theme-text-secondary);">' + user.razon_social + ' | RUC: ' + (user.ruc || '-') + '</span>' : '') +
+            '<br><span style="font-size:0.8rem;color:var(--theme-text-light);">' + count + ' solicitud(es)</span></div>' +
+            '<span style="font-size:0.8rem;color:var(--theme-text-secondary);">' + (user ? user.telefono || '-' : '-') + '</span></div>';
+        }).join('');
+      } else {
+        div.innerHTML = '<div style="color:var(--theme-text-light);padding:2rem;text-align:center;">Aún no tienes clientes asignados</div>';
+      }
+    };
+
+    loaders.perfil = function() {
+      document.getElementById('perfilAvatar').textContent = (currentUser.nombres || 'A')[0];
+      document.getElementById('perfilNombre').textContent = currentUser.nombres + ' ' + currentUser.apellidos;
+      document.getElementById('perfilEmail').textContent = currentUser.email;
+      document.getElementById('perfilInfo').innerHTML =
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><div><strong>Nombres:</strong><br>' + (currentUser.nombres || '-') + '</div>' +
+        '<div><strong>Apellidos:</strong><br>' + (currentUser.apellidos || '-') + '</div>' +
+        '<div><strong>Email:</strong><br>' + (currentUser.email || '-') + '</div>' +
+        '<div><strong>Teléfono:</strong><br>' + (currentUser.telefono || '-') + '</div>' +
+        '<div><strong>Especialidad:</strong><br>' + (currentUser.especialidad || '-') + '</div>' +
+        '<div><strong>Experiencia:</strong><br>' + (currentUser.experiencia_anos || '0') + ' años</div></div>';
+    };
+
+    function showToast(msg, type) {
+      var c = document.getElementById('toast-container') || (function() {
+        var d = document.createElement('div'); d.id = 'toast-container'; d.style.cssText = 'position:fixed;top:80px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;'; document.body.appendChild(d); return d;
+      })();
+      var t = document.createElement('div');
+      t.style.cssText = 'padding:14px 20px;border-radius:12px;background:var(--theme-card-bg,#fff);color:var(--theme-text,#333);box-shadow:0 8px 32px rgba(0,0,0,0.12);border-left:4px solid ' + (type === 'error' ? '#dc3545' : '#28a745') + ';display:flex;align-items:center;gap:10px;font-size:14px;min-width:280px;border:1px solid var(--theme-border,#e0e0e0);animation:fadeInUp .3s ease;';
+      t.innerHTML = '<i class="fas fa-' + (type === 'error' ? 'exclamation-circle' : 'check-circle') + '" style="color:' + (type === 'error' ? '#dc3545' : '#28a745') + '"></i> ' + msg;
+      c.appendChild(t);
+      setTimeout(function() { t.style.opacity = '0'; setTimeout(function() { t.remove(); }, 300); }, 4000);
+    }
+
+    // Close modal on outside click
+    document.addEventListener('click', function(e) {
+      if (e.target === document.getElementById('respuestaModal')) cerrarModal();
+    });
+
+    /* === INIT === */
+    showSection('dashboard');
+  </script>
+</body>
+</html>

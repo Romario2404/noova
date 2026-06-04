@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="azul-corporativo" data-mode="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a4b7a">
+  <meta name="description" content="NOOVA S.A.C. - Contacto para consultoría minera: ventilación, bombeo, drenaje, topografía, fotogrametría, simulación, ingeniería y gestión de proyectos.">
+  <meta name="keywords" content="minería, contacto, cotización, asesoría, consultoría minera, NOOVA">
+  <meta name="author" content="NOOVA S.A.C.">
+  <title>Contacto - NOOVA S.A.C. | Consultoría Minera</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/icons/favicon.svg">
+  <link rel="stylesheet" href="../../assets/css/theme.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    .contacto-hero {
+      position: relative;
+      min-height: 50vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 120px 24px 60px;
+    }
+    .contacto-hero-bg {
+      position: absolute;
+      inset: 0;
+      background: var(--theme-gradient-3);
+      z-index: 0;
+    }
+    .contacto-hero-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.5;
+    }
+    .contacto-hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 800px;
+    }
+    .contacto-hero-content h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .contacto-hero-content h1 span {
+      background: linear-gradient(135deg, #4db8e8, #ffffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .contacto-hero-content p {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.8);
+      max-width: 600px;
+      margin: 0 auto 20px;
+      line-height: 1.7;
+    }
+    .breadcrumb {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--theme-glass-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--theme-glass-border);
+      padding: 8px 20px;
+      border-radius: 50px;
+      color: #fff;
+      font-size: 0.85rem;
+      margin-bottom: 24px;
+    }
+    .breadcrumb a {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .breadcrumb a:hover { color: #fff; }
+    .breadcrumb span { color: rgba(255, 255, 255, 0.9); }
+    .breadcrumb i { font-size: 0.6rem; color: rgba(255, 255, 255, 0.4); }
+    .contacto-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+    .contacto-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    .contacto-info-card {
+      background: var(--theme-card-bg);
+      border-radius: 20px;
+      padding: 28px 24px;
+      border: 1px solid var(--theme-border);
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .contacto-info-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--theme-gradient-1);
+    }
+    .contacto-info-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px var(--theme-shadow-strong);
+    }
+    .contacto-info-card .cic-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      color: #fff;
+      background: var(--theme-gradient-1);
+      margin-bottom: 16px;
+    }
+    .contacto-info-card h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--theme-text);
+      margin-bottom: 8px;
+    }
+    .contacto-info-card p {
+      font-size: 0.9rem;
+      color: var(--theme-text-secondary);
+      line-height: 1.6;
+    }
+    .contacto-form-card {
+      background: var(--theme-card-bg);
+      border-radius: 20px;
+      padding: 36px;
+      border: 1px solid var(--theme-border);
+    }
+    .contacto-form-card h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--theme-text);
+      margin-bottom: 8px;
+    }
+    .contacto-form-card > p {
+      font-size: 0.9rem;
+      color: var(--theme-text-secondary);
+      margin-bottom: 24px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .contacto-social {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .contacto-social a {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: var(--theme-text-secondary);
+      background: var(--theme-card-bg);
+      border: 1px solid var(--theme-border);
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+    .contacto-social a:hover {
+      background: var(--theme-primary);
+      border-color: var(--theme-primary);
+      color: #fff;
+      transform: translateY(-4px);
+    }
+    .contacto-maps {
+      width: 100%;
+      height: 320px;
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: #fff;
+      position: relative;
+      border: 1px solid var(--theme-border);
+    }
+    .contacto-whatsapp-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 32px;
+      background: #25D366;
+      color: #fff;
+      border-radius: 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+    .contacto-whatsapp-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(37,211,102,0.4);
+    }
+    @media (max-width: 1024px) {
+      .contacto-layout { grid-template-columns: 1fr; }
+      .contacto-info-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .contacto-hero-content h1 { font-size: 2.2rem; }
+      .contacto-hero-content p { font-size: 1rem; }
+      .contacto-info-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .contacto-form-card { padding: 24px; }
+    }
+    @media (max-width: 480px) {
+      .contacto-hero-content h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar scrolled" id="navbar">
+    <div class="navbar-inner">
+      <a href="../../" class="navbar-brand">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="10" fill="url(#brand-gradient)"/>
+          <path d="M12 28V12l8-4 8 4v16l-8 4-8-4z" stroke="white" stroke-width="1.5" fill="none"/>
+          <path d="M20 8v24M12 16l8 4 8-4M12 24l8 4 8-4" stroke="white" stroke-width="1.5" stroke-opacity="0.5"/>
+          <defs>
+            <linearGradient id="brand-gradient" x1="0" y1="0" x2="40" y2="40">
+              <stop stop-color="#0a4b7a"/><stop offset="1" stop-color="#1a7bc4"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        NOOVA
+      </a>
+      <ul class="navbar-links">
+        <li><a href="../../">Inicio</a></li>
+        <li><a href="../../pages/nosotros/">Nosotros</a></li>
+        <li><a href="../../pages/servicios/">Servicios</a></li>
+        <li><a href="../../pages/proyectos/">Proyectos</a></li>
+        <li><a href="../../pages/productos/">Productos</a></li>
+        <li><a href="../../pages/noticias/">Noticias</a></li>
+        <li><a href="../../pages/contacto/" class="active">Contacto</a></li>
+        <li><a href="../../pages/aula_virtual/"><i class="fas fa-graduation-cap"></i> Aula Virtual</a></li>
+      </ul>
+      <div class="navbar-actions">
+        <button class="btn-icon" onclick="ThemeManager.setMode(ThemeManager.currentMode === 'dark' ? 'light' : 'dark')" title="Cambiar modo">
+          <i class="fas fa-moon" id="mode-icon"></i>
+        </button>
+        <a href="../../pages/contacto/?type=cotizacion" class="btn btn-primary btn-sm">Cotizar</a>
+        <button class="navbar-toggle" aria-label="Menú">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-brand">NOOVA S.A.C.</span>
+      <button class="sidebar-close">&times;</button>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="../../"><i class="fas fa-home"></i> Inicio</a>
+      <a href="../../pages/nosotros/"><i class="fas fa-building"></i> Nosotros</a>
+      <a href="../../pages/servicios/"><i class="fas fa-cogs"></i> Servicios</a>
+      <a href="../../pages/proyectos/"><i class="fas fa-project-diagram"></i> Proyectos</a>
+      <a href="../../pages/productos/"><i class="fas fa-box"></i> Productos</a>
+      <a href="../../pages/noticias/"><i class="fas fa-newspaper"></i> Noticias</a>
+      <a href="../../pages/contacto/" class="active"><i class="fas fa-envelope"></i> Contacto</a>
+      <hr style="border-color: rgba(255,255,255,0.1); margin: 16px 0;">
+      <a href="../../pages/aula_virtual/"><i class="fas fa-graduation-cap"></i> Aula Virtual</a>
+      <a href="../../pages/aula_virtual/clientes/"><i class="fas fa-user-tie"></i> Portal Cliente</a>
+      <a href="../../pages/aula_virtual/asesores/"><i class="fas fa-user-cog"></i> Portal Asesor</a>
+      <hr style="border-color: rgba(255,255,255,0.1); margin: 16px 0;">
+      <div style="padding: 12px 16px;">
+        <div id="theme-selector" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;"></div>
+        <div id="mode-toggle" style="margin-top: 12px;"></div>
+      </div>
+    </nav>
+  </aside>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <main id="app-content">
+  <section class="contacto-hero">
+    <div class="contacto-hero-bg"></div>
+    <div class="contacto-hero-content">
+      <div class="breadcrumb">
+        <a href="../../">Inicio</a>
+        <i class="fas fa-chevron-right"></i>
+        <span>Contacto</span>
+      </div>
+      <h1>Contáctanos</h1>
+      <p>Estamos listos para ayudarte. Contáctanos y descubre cómo podemos impulsar tu próximo proyecto minero con soluciones de ingeniería de alto nivel.</p>
+    </div>
+  </section>
+
+  <section class="section" data-reveal>
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label"><i class="fas fa-envelope"></i> Contacto</div>
+        <h2 class="section-title">Estamos Listos para Ayudarte</h2>
+        <p class="section-subtitle">Déjanos tus datos y nos pondremos en contacto contigo a la brevedad para atender tu requerimiento.</p>
+      </div>
+      <div class="contacto-layout">
+        <div>
+          <div class="contacto-info-grid">
+            <div class="contacto-info-card">
+              <div class="cic-icon"><i class="fas fa-map-marker-alt"></i></div>
+              <h4>Oficina Principal</h4>
+              <p>Av. Principal 1234, San Isidro<br>Lima 15076, Perú</p>
+            </div>
+            <div class="contacto-info-card">
+              <div class="cic-icon"><i class="fas fa-phone-alt"></i></div>
+              <h4>Teléfono</h4>
+              <p>+51 1 234 5678<br>+51 999 888 777</p>
+            </div>
+            <div class="contacto-info-card">
+              <div class="cic-icon"><i class="fas fa-envelope"></i></div>
+              <h4>Email</h4>
+              <p>contacto@noova.pe<br>ventas@noova.pe</p>
+            </div>
+            <div class="contacto-info-card">
+              <div class="cic-icon"><i class="fas fa-clock"></i></div>
+              <h4>Horario de Atención</h4>
+              <p>Lun - Vie: 8:00 AM - 6:00 PM<br>Sáb: 9:00 AM - 1:00 PM</p>
+            </div>
+          </div>
+          <div class="contacto-social">
+            <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="#" title="TikTok"><i class="fab fa-tiktok"></i></a>
+          </div>
+          <div class="contacto-maps" style="background: linear-gradient(135deg, #0a4b7a, #1a7bc4); position:relative; overflow:hidden;">
+            <div style="position:absolute;inset:0;opacity:0.1;background: radial-gradient(circle at 30% 40%, #4db8e8 0%, transparent 50%), radial-gradient(circle at 70% 60%, #ffffff 0%, transparent 50%);"></div>
+            <div style="text-align:center; position:relative; z-index:1;">
+              <i class="fas fa-map-pin" style="font-size:3rem;margin-bottom:16px;display:block;animation: mapPulse 2s ease-in-out infinite;"></i>
+              <span style="font-size:1.1rem;font-weight:600;">Av. Principal 1234, San Isidro, Lima</span>
+              <p style="font-size:0.85rem;margin-top:8px;opacity:0.7;"><i class="fas fa-phone"></i> +51 1 234 5678 | <i class="fas fa-envelope"></i> contacto@noova.pe</p>
+            </div>
+          </div>
+          <style>
+            @keyframes mapPulse {
+              0%, 100% { transform: scale(1); opacity: 1; }
+              50% { transform: scale(1.15); opacity: 0.7; }
+            }
+          </style>
+        </div>
+        <div class="contacto-form-card">
+          <h3><i class="fas fa-paper-plane" style="color:var(--theme-primary);margin-right:8px;"></i>Envíanos un Mensaje</h3>
+          <p>Completa el formulario y te responderemos a la brevedad.</p>
+          <form action="../../api/contacto/enviar.php" method="POST">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Nombres</label>
+                <input type="text" class="form-input" name="nombres" required placeholder="Ingrese sus nombres">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Apellidos</label>
+                <input type="text" class="form-input" name="apellidos" required placeholder="Ingrese sus apellidos">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-input" name="email" required placeholder="correo@ejemplo.com">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Teléfono</label>
+                <input type="tel" class="form-input" name="telefono" placeholder="+51 999 888 777">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Empresa</label>
+              <input type="text" class="form-input" name="empresa" placeholder="Nombre de su empresa">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Servicio de Interés</label>
+              <select class="form-select" name="servicio">
+                <option value="">Seleccione un servicio</option>
+                <option value="ventilacion">Ventilación de Minas</option>
+                <option value="bombeo">Bombeo & Drenaje</option>
+                <option value="topografia">Topografía & Fotogrametría</option>
+                <option value="simulacion">Simulación & Modelado</option>
+                <option value="ingenieria">Ingeniería de Proyectos</option>
+                <option value="gestion">Gestión de Proyectos</option>
+                <option value="equipos">Comercialización de Equipos</option>
+                <option value="otro">Otro</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mensaje</label>
+              <textarea class="form-textarea" name="mensaje" required placeholder="Describa su proyecto o requerimiento..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg w-full">
+              <i class="fas fa-paper-plane"></i> Enviar Mensaje
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark" data-reveal>
+    <div class="container" style="text-align:center;">
+      <div class="section-header">
+        <div class="section-label"><i class="fab fa-whatsapp"></i> Atención Inmediata</div>
+        <h2 class="section-title">Contáctanos por WhatsApp</h2>
+        <p class="section-subtitle">Resuelve tus dudas de forma rápida y directa a través de nuestro canal de WhatsApp Business.</p>
+      </div>
+      <a href="https://wa.me/51999888777" target="_blank" rel="noopener" class="contacto-whatsapp-btn">
+        <i class="fab fa-whatsapp fa-2x"></i>
+        <span>Chatea con Nosotros<br><small style="font-weight:400;opacity:0.8;">+51 999 888 777</small></span>
+      </a>
+    </div>
+  </section>
+
+  </main>
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>NOOVA S.A.C.</h3>
+          <p>Consultoría minera, ventilación, bombeo, drenaje, topografía, fotogrametría, simulación, ingeniería y gestión integral de proyectos para la industria minera e industrial.</p>
+        </div>
+        <div>
+          <h4>Servicios</h4>
+          <ul>
+            <li><a href="../../pages/servicios/?t=ventilacion">Ventilación de Minas</a></li>
+            <li><a href="../../pages/servicios/?t=bombeo">Bombeo & Drenaje</a></li>
+            <li><a href="../../pages/servicios/?t=topografia">Topografía & Fotogrametría</a></li>
+            <li><a href="../../pages/servicios/?t=simulacion">Simulación & Modelado</a></li>
+            <li><a href="../../pages/servicios/?t=ingenieria">Ingeniería de Proyectos</a></li>
+            <li><a href="../../pages/servicios/?t=gestion">Gestión de Proyectos</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Empresa</h4>
+          <ul>
+            <li><a href="../../pages/nosotros/">Sobre Nosotros</a></li>
+            <li><a href="../../pages/proyectos/">Proyectos</a></li>
+            <li><a href="../../pages/productos/">Productos</a></li>
+            <li><a href="../../pages/noticias/">Noticias</a></li>
+            <li><a href="../../pages/contacto/">Contacto</a></li>
+            <li><a href="../../pages/aula_virtual/">Aula Virtual</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Contacto</h4>
+          <ul>
+            <li><a href="tel:+5112345678">+51 1 234 5678</a></li>
+            <li><a href="mailto:contacto@noova.pe">contacto@noova.pe</a></li>
+            <li><a href="#">Av. Principal 1234, San Isidro</a></li>
+            <li><a href="#">Lima, Perú</a></li>
+          </ul>
+          <div style="display:flex;gap:8px;margin-top:16px;">
+            <a href="#" style="width:36px;height:36px;border-radius:8px;border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.6);"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" style="width:36px;height:36px;border-radius:8px;border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.6);"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" style="width:36px;height:36px;border-radius:8px;border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.6);"><i class="fab fa-instagram"></i></a>
+            <a href="#" style="width:36px;height:36px;border-radius:8px;border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.6);"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 NOOVA S.A.C. Todos los derechos reservados.</p>
+        <p>Diseñado con <i class="fas fa-heart" style="color:#dc3545;"></i> para la industria minera</p>
+      </div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/51999888777" target="_blank" rel="noopener" style="position:fixed;bottom:24px;left:24px;z-index:999;width:56px;height:56px;background:#25D366;border-radius:16px;display:flex;align-items:center;justify-content:center;color:white;font-size:1.5rem;box-shadow:0 4px 20px rgba(37,211,102,0.4);transition:all 0.3s ease;text-decoration:none;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>window.BASE_PATH = '../../';</script>
+  <script src="../../assets/js/theme.js"></script>
+  <script src="../../assets/js/dashboard.js"></script>
+  <script src="../../assets/js/router.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script>
+    (function() {
+      var urlParams = new URLSearchParams(window.location.search);
+      var type = urlParams.get('type');
+      var servicio = urlParams.get('servicio');
+      var producto = urlParams.get('producto');
+      if (type) {
+        var msgEl = document.querySelector('textarea[name="mensaje"]');
+        if (msgEl) {
+          if (type === 'cotizacion') msgEl.value = 'Solicito cotización para: ';
+          else if (type === 'asesoria') msgEl.value = 'Solicito asesoría para: ';
+        }
+      }
+      if (producto) {
+        var msgEl = document.querySelector('textarea[name="mensaje"]');
+        if (msgEl && !msgEl.value) msgEl.value = 'Solicito cotización del producto: ' + producto;
+      }
+      if (servicio) {
+        var selEl = document.querySelector('select[name="servicio"]');
+        if (selEl) {
+          for (var i = 0; i < selEl.options.length; i++) {
+            if (selEl.options[i].value === servicio) { selEl.selectedIndex = i; break; }
+          }
+        }
+      }
+
+      // AJAX form submission
+      var form = document.querySelector('.contacto-form-card form');
+      if (form) {
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          var btn = form.querySelector('button[type="submit"]');
+          var origText = btn.innerHTML;
+          btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+          btn.disabled = true;
+          var data = new FormData(form);
+          fetch(form.action, { method: 'POST', body: data })
+            .then(function(r) { return r.json(); })
+            .then(function(res) {
+              if (res.success || res.message) {
+                NOOVA.showToast(res.message || 'Mensaje enviado correctamente', 'success');
+                form.reset();
+              } else {
+                NOOVA.showToast(res.error || 'Error al enviar mensaje', 'error');
+              }
+            })
+            .catch(function() {
+              NOOVA.showToast('Error de conexión. Intente nuevamente.', 'error');
+            })
+            .finally(function() {
+              btn.innerHTML = origText;
+              btn.disabled = false;
+            });
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

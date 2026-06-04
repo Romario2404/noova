@@ -1,0 +1,393 @@
+:root {
+  /* Tema 1: Azul Corporativo (Default) */
+  --theme-primary: #0a4b7a;
+  --theme-primary-light: #1a7bc4;
+  --theme-primary-dark: #062d4a;
+  --theme-secondary: #2c8cc9;
+  --theme-accent: #4db8e8;
+  --theme-success: #28a745;
+  --theme-warning: #ffc107;
+  --theme-danger: #dc3545;
+  --theme-info: #17a2b8;
+  --theme-bg: #f4f7fc;
+  --theme-surface: #ffffff;
+  --theme-surface-hover: #f0f5ff;
+  --theme-text: #1a2a3a;
+  --theme-text-secondary: #5a6a7a;
+  --theme-text-light: #8a9aaa;
+  --theme-border: #e0e8f0;
+  --theme-border-light: #f0f4f8;
+  --theme-shadow: rgba(10, 75, 122, 0.08);
+  --theme-shadow-strong: rgba(10, 75, 122, 0.15);
+  --theme-sidebar-bg: #0a2a4a;
+  --theme-sidebar-text: #c0d0e0;
+  --theme-sidebar-active: #1a7bc4;
+  --theme-navbar-bg: #ffffff;
+  --theme-card-bg: #ffffff;
+  --theme-input-bg: #ffffff;
+  --theme-input-border: #d0d8e0;
+  --theme-table-stripe: #f8fafc;
+  --theme-table-hover: #f0f5ff;
+  --theme-glass-bg: rgba(255, 255, 255, 0.15);
+  --theme-glass-border: rgba(255, 255, 255, 0.25);
+  --theme-glass-shadow: rgba(10, 75, 122, 0.1);
+  --theme-gradient-1: linear-gradient(135deg, #0a4b7a, #1a7bc4);
+  --theme-gradient-2: linear-gradient(135deg, #1a7bc4, #4db8e8);
+  --theme-gradient-3: linear-gradient(135deg, #0a2a4a, #0a4b7a);
+  --theme-chart-1: #0a4b7a;
+  --theme-chart-2: #1a7bc4;
+  --theme-chart-3: #4db8e8;
+  --theme-chart-4: #28a745;
+  --theme-chart-5: #ffc107;
+  --theme-chart-6: #dc3545;
+  --theme-scrollbar: #c0d0e0;
+  --theme-scrollbar-hover: #a0b0c0;
+  --theme-focus-ring: rgba(10, 75, 122, 0.25);
+  --theme-overlay: rgba(10, 42, 74, 0.6);
+}
+
+/* Tema 2: Celeste Profesional */
+[data-theme="celeste"] {
+  --theme-primary: #0088cc;
+  --theme-primary-light: #33aadd;
+  --theme-primary-dark: #006699;
+  --theme-secondary: #44bbee;
+  --theme-accent: #77ddee;
+  --theme-sidebar-bg: #005577;
+  --theme-sidebar-active: #0088cc;
+  --theme-gradient-1: linear-gradient(135deg, #0088cc, #33aadd);
+  --theme-gradient-2: linear-gradient(135deg, #33aadd, #77ddee);
+  --theme-gradient-3: linear-gradient(135deg, #005577, #0088cc);
+  --theme-shadow: rgba(0, 136, 204, 0.08);
+  --theme-shadow-strong: rgba(0, 136, 204, 0.15);
+  --theme-focus-ring: rgba(0, 136, 204, 0.25);
+  --theme-chart-1: #0088cc;
+  --theme-chart-2: #33aadd;
+  --theme-chart-3: #77ddee;
+  --theme-overlay: rgba(0, 85, 119, 0.6);
+}
+
+/* Tema 3: Verde Ejecutivo */
+[data-theme="verde"] {
+  --theme-primary: #1a7a4a;
+  --theme-primary-light: #2aaa6a;
+  --theme-primary-dark: #0a5a3a;
+  --theme-secondary: #3aba7a;
+  --theme-accent: #5ada9a;
+  --theme-sidebar-bg: #0a4a2a;
+  --theme-sidebar-active: #1a7a4a;
+  --theme-gradient-1: linear-gradient(135deg, #1a7a4a, #2aaa6a);
+  --theme-gradient-2: linear-gradient(135deg, #2aaa6a, #5ada9a);
+  --theme-gradient-3: linear-gradient(135deg, #0a4a2a, #1a7a4a);
+  --theme-shadow: rgba(26, 122, 74, 0.08);
+  --theme-shadow-strong: rgba(26, 122, 74, 0.15);
+  --theme-focus-ring: rgba(26, 122, 74, 0.25);
+  --theme-chart-1: #1a7a4a;
+  --theme-chart-2: #2aaa6a;
+  --theme-chart-3: #5ada9a;
+  --theme-overlay: rgba(10, 74, 42, 0.6);
+}
+
+/* Tema 4: Turquesa Moderno */
+[data-theme="turquesa"] {
+  --theme-primary: #0a8a8a;
+  --theme-primary-light: #2ababa;
+  --theme-primary-dark: #0a6a6a;
+  --theme-secondary: #4acaca;
+  --theme-accent: #6aeaea;
+  --theme-sidebar-bg: #0a5a5a;
+  --theme-sidebar-active: #0a8a8a;
+  --theme-gradient-1: linear-gradient(135deg, #0a8a8a, #2ababa);
+  --theme-gradient-2: linear-gradient(135deg, #2ababa, #6aeaea);
+  --theme-gradient-3: linear-gradient(135deg, #0a5a5a, #0a8a8a);
+  --theme-shadow: rgba(10, 138, 138, 0.08);
+  --theme-shadow-strong: rgba(10, 138, 138, 0.15);
+  --theme-focus-ring: rgba(10, 138, 138, 0.25);
+  --theme-chart-1: #0a8a8a;
+  --theme-chart-2: #2ababa;
+  --theme-chart-3: #6aeaea;
+  --theme-overlay: rgba(10, 90, 90, 0.6);
+}
+
+/* Tema 5: Morado Corporativo */
+[data-theme="morado"] {
+  --theme-primary: #5a2a8a;
+  --theme-primary-light: #8a4aba;
+  --theme-primary-dark: #3a1a6a;
+  --theme-secondary: #9a5aca;
+  --theme-accent: #ba7ada;
+  --theme-sidebar-bg: #2a0a4a;
+  --theme-sidebar-active: #5a2a8a;
+  --theme-gradient-1: linear-gradient(135deg, #5a2a8a, #8a4aba);
+  --theme-gradient-2: linear-gradient(135deg, #8a4aba, #ba7ada);
+  --theme-gradient-3: linear-gradient(135deg, #2a0a4a, #5a2a8a);
+  --theme-shadow: rgba(90, 42, 138, 0.08);
+  --theme-shadow-strong: rgba(90, 42, 138, 0.15);
+  --theme-focus-ring: rgba(90, 42, 138, 0.25);
+  --theme-chart-1: #5a2a8a;
+  --theme-chart-2: #8a4aba;
+  --theme-chart-3: #ba7ada;
+  --theme-overlay: rgba(42, 10, 74, 0.6);
+}
+
+/* Tema 6: Azul Marino */
+[data-theme="azul-marino"] {
+  --theme-primary: #0a2a5a;
+  --theme-primary-light: #1a4a8a;
+  --theme-primary-dark: #061a3a;
+  --theme-secondary: #2a5a9a;
+  --theme-accent: #4a7aba;
+  --theme-sidebar-bg: #061a3a;
+  --theme-sidebar-active: #0a2a5a;
+  --theme-gradient-1: linear-gradient(135deg, #0a2a5a, #1a4a8a);
+  --theme-gradient-2: linear-gradient(135deg, #1a4a8a, #4a7aba);
+  --theme-gradient-3: linear-gradient(135deg, #061a3a, #0a2a5a);
+  --theme-shadow: rgba(10, 42, 90, 0.08);
+  --theme-shadow-strong: rgba(10, 42, 90, 0.15);
+  --theme-focus-ring: rgba(10, 42, 90, 0.25);
+  --theme-chart-1: #0a2a5a;
+  --theme-chart-2: #1a4a8a;
+  --theme-chart-3: #4a7aba;
+  --theme-overlay: rgba(6, 26, 58, 0.6);
+}
+
+/* Tema 7: Gris Ejecutivo */
+[data-theme="gris"] {
+  --theme-primary: #3a4a5a;
+  --theme-primary-light: #5a6a7a;
+  --theme-primary-dark: #2a3a4a;
+  --theme-secondary: #6a7a8a;
+  --theme-accent: #8a9aaa;
+  --theme-sidebar-bg: #2a3a4a;
+  --theme-sidebar-active: #3a4a5a;
+  --theme-gradient-1: linear-gradient(135deg, #3a4a5a, #5a6a7a);
+  --theme-gradient-2: linear-gradient(135deg, #5a6a7a, #8a9aaa);
+  --theme-gradient-3: linear-gradient(135deg, #2a3a4a, #3a4a5a);
+  --theme-shadow: rgba(58, 74, 90, 0.08);
+  --theme-shadow-strong: rgba(58, 74, 90, 0.15);
+  --theme-focus-ring: rgba(58, 74, 90, 0.25);
+  --theme-chart-1: #3a4a5a;
+  --theme-chart-2: #5a6a7a;
+  --theme-chart-3: #8a9aaa;
+  --theme-overlay: rgba(42, 58, 74, 0.6);
+}
+
+/* Tema 8: Arena Profesional */
+[data-theme="arena"] {
+  --theme-primary: #8a7a5a;
+  --theme-primary-light: #baaa7a;
+  --theme-primary-dark: #6a5a3a;
+  --theme-secondary: #caba8a;
+  --theme-accent: #daca9a;
+  --theme-sidebar-bg: #5a4a2a;
+  --theme-sidebar-active: #8a7a5a;
+  --theme-gradient-1: linear-gradient(135deg, #8a7a5a, #baaa7a);
+  --theme-gradient-2: linear-gradient(135deg, #baaa7a, #daca9a);
+  --theme-gradient-3: linear-gradient(135deg, #5a4a2a, #8a7a5a);
+  --theme-shadow: rgba(138, 122, 90, 0.08);
+  --theme-shadow-strong: rgba(138, 122, 90, 0.15);
+  --theme-focus-ring: rgba(138, 122, 90, 0.25);
+  --theme-chart-1: #8a7a5a;
+  --theme-chart-2: #baaa7a;
+  --theme-chart-3: #daca9a;
+  --theme-overlay: rgba(90, 74, 42, 0.6);
+}
+
+/* Tema 9: Cian Tecnológico */
+[data-theme="cian"] {
+  --theme-primary: #0a6a8a;
+  --theme-primary-light: #2a9aba;
+  --theme-primary-dark: #0a4a6a;
+  --theme-secondary: #4abada;
+  --theme-accent: #6adafa;
+  --theme-sidebar-bg: #0a3a5a;
+  --theme-sidebar-active: #0a6a8a;
+  --theme-gradient-1: linear-gradient(135deg, #0a6a8a, #2a9aba);
+  --theme-gradient-2: linear-gradient(135deg, #2a9aba, #6adafa);
+  --theme-gradient-3: linear-gradient(135deg, #0a3a5a, #0a6a8a);
+  --theme-shadow: rgba(10, 106, 138, 0.08);
+  --theme-shadow-strong: rgba(10, 106, 138, 0.15);
+  --theme-focus-ring: rgba(10, 106, 138, 0.25);
+  --theme-chart-1: #0a6a8a;
+  --theme-chart-2: #2a9aba;
+  --theme-chart-3: #6adafa;
+  --theme-overlay: rgba(10, 58, 90, 0.6);
+}
+
+/* Tema 10: Esmeralda */
+[data-theme="esmeralda"] {
+  --theme-primary: #0a6a4a;
+  --theme-primary-light: #2a9a6a;
+  --theme-primary-dark: #0a4a3a;
+  --theme-secondary: #4aba8a;
+  --theme-accent: #6adaaa;
+  --theme-sidebar-bg: #0a3a2a;
+  --theme-sidebar-active: #0a6a4a;
+  --theme-gradient-1: linear-gradient(135deg, #0a6a4a, #2a9a6a);
+  --theme-gradient-2: linear-gradient(135deg, #2a9a6a, #6adaaa);
+  --theme-gradient-3: linear-gradient(135deg, #0a3a2a, #0a6a4a);
+  --theme-shadow: rgba(10, 106, 74, 0.08);
+  --theme-shadow-strong: rgba(10, 106, 74, 0.15);
+  --theme-focus-ring: rgba(10, 106, 74, 0.25);
+  --theme-chart-1: #0a6a4a;
+  --theme-chart-2: #2a9a6a;
+  --theme-chart-3: #6adaaa;
+  --theme-overlay: rgba(10, 58, 42, 0.6);
+}
+
+/* Tema 11: Índigo */
+[data-theme="indigo"] {
+  --theme-primary: #2a3a8a;
+  --theme-primary-light: #4a5aba;
+  --theme-primary-dark: #1a2a6a;
+  --theme-secondary: #5a6aca;
+  --theme-accent: #7a8ada;
+  --theme-sidebar-bg: #1a2a5a;
+  --theme-sidebar-active: #2a3a8a;
+  --theme-gradient-1: linear-gradient(135deg, #2a3a8a, #4a5aba);
+  --theme-gradient-2: linear-gradient(135deg, #4a5aba, #7a8ada);
+  --theme-gradient-3: linear-gradient(135deg, #1a2a5a, #2a3a8a);
+  --theme-shadow: rgba(42, 58, 138, 0.08);
+  --theme-shadow-strong: rgba(42, 58, 138, 0.15);
+  --theme-focus-ring: rgba(42, 58, 138, 0.25);
+  --theme-chart-1: #2a3a8a;
+  --theme-chart-2: #4a5aba;
+  --theme-chart-3: #7a8ada;
+  --theme-overlay: rgba(26, 42, 90, 0.6);
+}
+
+/* Tema 12: Grafito Claro */
+[data-theme="grafito"] {
+  --theme-primary: #4a5a6a;
+  --theme-primary-light: #6a7a8a;
+  --theme-primary-dark: #3a4a5a;
+  --theme-secondary: #7a8a9a;
+  --theme-accent: #9aaaba;
+  --theme-sidebar-bg: #3a4a5a;
+  --theme-sidebar-active: #4a5a6a;
+  --theme-gradient-1: linear-gradient(135deg, #4a5a6a, #6a7a8a);
+  --theme-gradient-2: linear-gradient(135deg, #6a7a8a, #9aaaba);
+  --theme-gradient-3: linear-gradient(135deg, #3a4a5a, #4a5a6a);
+  --theme-shadow: rgba(74, 90, 106, 0.08);
+  --theme-shadow-strong: rgba(74, 90, 106, 0.15);
+  --theme-focus-ring: rgba(74, 90, 106, 0.25);
+  --theme-chart-1: #4a5a6a;
+  --theme-chart-2: #6a7a8a;
+  --theme-chart-3: #9aaaba;
+  --theme-overlay: rgba(58, 74, 90, 0.6);
+}
+
+/* Tema 13: Industrial Moderno */
+[data-theme="industrial"] {
+  --theme-primary: #2a4a6a;
+  --theme-primary-light: #4a6a8a;
+  --theme-primary-dark: #1a3a5a;
+  --theme-secondary: #5a7a9a;
+  --theme-accent: #7a9aba;
+  --theme-sidebar-bg: #1a2a4a;
+  --theme-sidebar-active: #2a4a6a;
+  --theme-gradient-1: linear-gradient(135deg, #2a4a6a, #4a6a8a);
+  --theme-gradient-2: linear-gradient(135deg, #4a6a8a, #7a9aba);
+  --theme-gradient-3: linear-gradient(135deg, #1a2a4a, #2a4a6a);
+  --theme-shadow: rgba(42, 74, 106, 0.08);
+  --theme-shadow-strong: rgba(42, 74, 106, 0.15);
+  --theme-focus-ring: rgba(42, 74, 106, 0.25);
+  --theme-chart-1: #2a4a6a;
+  --theme-chart-2: #4a6a8a;
+  --theme-chart-3: #7a9aba;
+  --theme-overlay: rgba(26, 42, 74, 0.6);
+}
+
+/* Tema 14: Premium Corporativo */
+[data-theme="premium"] {
+  --theme-primary: #1a2a4a;
+  --theme-primary-light: #3a5a7a;
+  --theme-primary-dark: #0a1a3a;
+  --theme-secondary: #4a6a8a;
+  --theme-accent: #6a8aaa;
+  --theme-sidebar-bg: #0a1a3a;
+  --theme-sidebar-active: #1a2a4a;
+  --theme-gradient-1: linear-gradient(135deg, #1a2a4a, #3a5a7a);
+  --theme-gradient-2: linear-gradient(135deg, #3a5a7a, #6a8aaa);
+  --theme-gradient-3: linear-gradient(135deg, #0a1a3a, #1a2a4a);
+  --theme-shadow: rgba(26, 42, 74, 0.08);
+  --theme-shadow-strong: rgba(26, 42, 74, 0.15);
+  --theme-focus-ring: rgba(26, 42, 74, 0.25);
+  --theme-chart-1: #1a2a4a;
+  --theme-chart-2: #3a5a7a;
+  --theme-chart-3: #6a8aaa;
+  --theme-overlay: rgba(10, 26, 58, 0.6);
+}
+
+/* Tema 15: Empresarial Claro */
+[data-theme="empresarial"] {
+  --theme-primary: #2a5a7a;
+  --theme-primary-light: #4a7a9a;
+  --theme-primary-dark: #1a4a6a;
+  --theme-secondary: #5a8aaa;
+  --theme-accent: #7aaaca;
+  --theme-sidebar-bg: #1a3a5a;
+  --theme-sidebar-active: #2a5a7a;
+  --theme-gradient-1: linear-gradient(135deg, #2a5a7a, #4a7a9a);
+  --theme-gradient-2: linear-gradient(135deg, #4a7a9a, #7aaaca);
+  --theme-gradient-3: linear-gradient(135deg, #1a3a5a, #2a5a7a);
+  --theme-shadow: rgba(42, 90, 122, 0.08);
+  --theme-shadow-strong: rgba(42, 90, 122, 0.15);
+  --theme-focus-ring: rgba(42, 90, 122, 0.25);
+  --theme-chart-1: #2a5a7a;
+  --theme-chart-2: #4a7a9a;
+  --theme-chart-3: #7aaaca;
+  --theme-overlay: rgba(26, 58, 90, 0.6);
+}
+
+/* Dark Mode */
+[data-mode="dark"] {
+  --theme-bg: #1a1a2a;
+  --theme-surface: #2a2a3a;
+  --theme-surface-hover: #32324a;
+  --theme-text: #e0e4ea;
+  --theme-text-secondary: #a0a8b4;
+  --theme-text-light: #6a7280;
+  --theme-border: #3a3a4a;
+  --theme-border-light: #323240;
+  --theme-card-bg: #2a2a3a;
+  --theme-input-bg: #323240;
+  --theme-input-border: #3a3a4a;
+  --theme-table-stripe: #222230;
+  --theme-table-hover: #323240;
+  --theme-navbar-bg: #1e1e2e;
+  --theme-glass-bg: rgba(42, 42, 58, 0.5);
+  --theme-glass-border: rgba(58, 58, 74, 0.5);
+  --theme-glass-shadow: rgba(0, 0, 0, 0.2);
+  --theme-scrollbar: #3a3a4a;
+  --theme-scrollbar-hover: #4a4a5a;
+  --theme-overlay: rgba(0, 0, 0, 0.7);
+  --theme-shadow: rgba(0, 0, 0, 0.15);
+  --theme-shadow-strong: rgba(0, 0, 0, 0.3);
+}
+
+/* Light Mode Overrides */
+[data-mode="light"] {
+  --theme-bg: #f4f7fc;
+  --theme-surface: #ffffff;
+  --theme-surface-hover: #f0f5ff;
+  --theme-text: #1a2a3a;
+  --theme-text-secondary: #5a6a7a;
+  --theme-text-light: #8a9aaa;
+  --theme-border: #e0e8f0;
+  --theme-border-light: #f0f4f8;
+  --theme-card-bg: #ffffff;
+  --theme-input-bg: #ffffff;
+  --theme-input-border: #d0d8e0;
+  --theme-table-stripe: #f8fafc;
+  --theme-table-hover: #f0f5ff;
+  --theme-navbar-bg: #ffffff;
+  --theme-glass-bg: rgba(255, 255, 255, 0.15);
+  --theme-glass-border: rgba(255, 255, 255, 0.25);
+  --theme-glass-shadow: rgba(10, 75, 122, 0.1);
+  --theme-scrollbar: #c0d0e0;
+  --theme-scrollbar-hover: #a0b0c0;
+  --theme-overlay: rgba(10, 42, 74, 0.6);
+  --theme-shadow: rgba(10, 75, 122, 0.08);
+  --theme-shadow-strong: rgba(10, 75, 122, 0.15);
+}

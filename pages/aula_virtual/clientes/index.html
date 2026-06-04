@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es-PE" data-theme="azul-corporativo" data-mode="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a4b7a">
+  <title>Dashboard Cliente - NOOVA S.A.C.</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js">
+  <link rel="stylesheet" href="../../../assets/css/theme.css">
+  <link rel="stylesheet" href="../../../assets/css/main.css">
+  <style>
+    .portal-layout { display: flex; min-height: 100vh; }
+    .portal-sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: 280px; background: var(--theme-sidebar-bg); z-index: 1000; display: flex; flex-direction: column; overflow-y: auto; }
+    .portal-sidebar-header { padding: 24px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 12px; }
+    .portal-sidebar-header i { font-size: 1.6rem; color: var(--theme-accent); }
+    .portal-sidebar-header h2 { color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.15rem; font-weight: 700; }
+    .portal-sidebar-nav { flex: 1; padding: 16px 12px; }
+    .portal-sidebar-nav a { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: var(--theme-sidebar-text); font-size: 0.9rem; font-weight: 500; border-radius: 12px; transition: all 0.3s ease; margin-bottom: 2px; }
+    .portal-sidebar-nav a:hover, .portal-sidebar-nav a.active { background: rgba(255,255,255,0.1); color: #fff; }
+    .portal-sidebar-nav a.active { background: var(--theme-sidebar-active); }
+    .portal-sidebar-nav a i { width: 20px; text-align: center; font-size: 1rem; }
+    .portal-sidebar-footer { padding: 16px 12px; border-top: 1px solid rgba(255,255,255,0.08); }
+    .portal-sidebar-footer a { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: var(--theme-sidebar-text); font-size: 0.9rem; font-weight: 500; border-radius: 12px; transition: all 0.3s ease; cursor: pointer; }
+    .portal-sidebar-footer a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .portal-main { margin-left: 280px; flex: 1; background: var(--theme-bg); min-height: 100vh; }
+    .portal-topbar { display: flex; align-items: center; justify-content: space-between; padding: 20px 32px; background: var(--theme-surface); border-bottom: 1px solid var(--theme-border); }
+    .portal-topbar h1 { font-size: 1.3rem; font-weight: 700; }
+    .portal-topbar h1 span { color: var(--theme-text-secondary); font-weight: 400; }
+    .portal-topbar-actions { display: flex; align-items: center; gap: 12px; }
+    .portal-content { padding: 32px; max-width: 1400px; }
+    @media (max-width: 768px) { .portal-sidebar { transform: translateX(-100%); } .portal-sidebar.open { transform: translateX(0); } .portal-main { margin-left: 0; } .portal-content { padding: 20px; } }
+    .notification-unread { background: var(--theme-surface-hover); border-left: 3px solid var(--theme-primary); }
+    .section-content { display: none; }
+    .section-content.active { display: block; animation: fadeIn 0.3s ease; }
+    .action-btn { background: transparent; border: 1px solid var(--theme-border); border-radius: 6px; padding: 0.35rem 0.6rem; cursor: pointer; color: var(--theme-text-light); font-size: 0.8rem; transition: all 0.2s; }
+    .action-btn:hover { background: var(--theme-hover); color: var(--theme-text); }
+    .action-btn + .action-btn { margin-left: 0.3rem; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+  <div class="portal-layout">
+    <aside class="portal-sidebar">
+      <div class="portal-sidebar-header">
+        <i class="fas fa-user-tie"></i>
+        <h2>Cliente NOOVA</h2>
+      </div>
+      <nav class="portal-sidebar-nav">
+        <a href="#" class="active" data-section="dashboard"><i class="fas fa-th-large"></i> Dashboard</a>
+        <a href="#" data-section="proyectos"><i class="fas fa-folder-open"></i> Mis Proyectos</a>
+        <a href="#" data-section="solicitudes"><i class="fas fa-paper-plane"></i> Solicitar Proyecto</a>
+        <a href="#" data-section="notificaciones"><i class="fas fa-bell"></i> Notificaciones</a>
+        <a href="#" data-section="perfil"><i class="fas fa-user-cog"></i> Mi Perfil</a>
+      </nav>
+      <div class="portal-sidebar-footer">
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+      </div>
+    </aside>
+
+    <div class="portal-main">
+      <header class="portal-topbar">
+        <h1>Bienvenido, <span id="clientName">[Nombre del Cliente]</span></h1>
+        <div class="portal-topbar-actions">
+          <button class="btn-icon" onclick="alert('Notificaciones: ' + notifsNoLeidas.length)"><i class="fas fa-bell"></i></button>
+        </div>
+      </header>
+
+      <div class="portal-content">
+
+        <!-- DASHBOARD -->
+        <div class="section-content active" id="section-dashboard">
+          <div class="dashboard-grid" id="statsGrid"></div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
+            <div class="chart-container">
+              <h3>Avance General de Proyectos</h3>
+              <div style="max-width: 300px; margin: 0 auto;"><canvas id="clientChart"></canvas></div>
+            </div>
+            <div class="chart-container">
+              <h3>Notificaciones Recientes</h3>
+              <div id="recentNotifs"><div style="color:var(--theme-text-light);padding:1rem;">Cargando...</div></div>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="table">
+              <thead><tr><th>Código</th><th>Nombre</th><th>Estado</th><th>Avance</th><th>Fecha</th></tr></thead>
+              <tbody id="dashboardProyTable"><tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--theme-text-light)">Cargando...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PROYECTOS -->
+        <div class="section-content" id="section-proyectos">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+            <div><h2 style="margin:0;font-size:1.3rem;"><i class="fas fa-folder-open"></i> Mis Proyectos</h2><p style="margin:0.25rem 0 0;color:var(--theme-text-secondary);font-size:0.875rem;">Todos tus proyectos</p></div>
+          </div>
+          <div class="table-container">
+            <table class="table">
+              <thead><tr><th>Código</th><th>Nombre</th><th>Estado</th><th>Avance</th><th>Asesor</th><th>Inicio</th><th>Acciones</th></tr></thead>
+              <tbody id="proyectosBody"><tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--theme-text-light)">Cargando...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SOLICITUDES -->
+        <div class="section-content" id="section-solicitudes">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+            <div><h2 style="margin:0;font-size:1.3rem;"><i class="fas fa-paper-plane"></i> Solicitar Proyecto</h2><p style="margin:0.25rem 0 0;color:var(--theme-text-secondary);font-size:0.875rem;">Solicita un proyecto y asigna un asesor</p></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px;">
+            <div class="chart-container">
+              <h3>Nueva Solicitud</h3>
+              <form id="solicitudForm" onsubmit="enviarSolicitud(event)">
+                <div class="form-group">
+                  <label>Tipo de Proyecto</label>
+                  <select name="tipo_proyecto" required style="width:100%;padding:10px;border:1px solid var(--theme-border);border-radius:8px;background:var(--theme-card-bg);color:var(--theme-text);">
+                    <option value="">Seleccione...</option>
+                    <option value="ventilacion">Ventilación</option>
+                    <option value="bombeo">Bombeo</option>
+                    <option value="drenaje">Drenaje</option>
+                    <option value="topografia">Topografía</option>
+                    <option value="fotogrametria">Fotogrametría</option>
+                    <option value="simulacion">Simulación</option>
+                    <option value="ingenieria">Ingeniería</option>
+                    <option value="gestion">Gestión</option>
+                    <option value="equipos">Equipos</option>
+                    <option value="otro">Otro</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Asesor (opcional)</label>
+                  <select name="asesor_id" id="asesorSelect" style="width:100%;padding:10px;border:1px solid var(--theme-border);border-radius:8px;background:var(--theme-card-bg);color:var(--theme-text);">
+                    <option value="">Sin asesor específico</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Descripción del Proyecto</label>
+                  <textarea name="descripcion" rows="4" placeholder="Describe brevemente el proyecto..." style="width:100%;padding:10px;border:1px solid var(--theme-border);border-radius:8px;background:var(--theme-card-bg);color:var(--theme-text);font-family:inherit;resize:vertical;"></textarea>
+                </div>
+                <button type="submit" id="solicitudBtn" style="padding:0.7rem 1.5rem;background:var(--theme-primary);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;width:100%;"><i class="fas fa-paper-plane"></i> Enviar Solicitud</button>
+              </form>
+            </div>
+            <div>
+              <h3 style="margin-bottom:1rem;">Mis Solicitudes <span id="solicitudesCount" style="font-size:0.8rem;color:var(--theme-text-light);"></span></h3>
+              <div id="solicitudesList" style="max-height:400px;overflow-y:auto;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- NOTIFICACIONES -->
+        <div class="section-content" id="section-notificaciones">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+            <div><h2 style="margin:0;font-size:1.3rem;"><i class="fas fa-bell"></i> Notificaciones</h2><p style="margin:0.25rem 0 0;color:var(--theme-text-secondary);font-size:0.875rem;">Todas tus notificaciones</p></div>
+          </div>
+          <div id="notifListFull"><div style="color:var(--theme-text-light);padding:1rem;">Cargando...</div></div>
+        </div>
+
+        <!-- PERFIL -->
+        <div class="section-content" id="section-perfil">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+            <div><h2 style="margin:0;font-size:1.3rem;"><i class="fas fa-user-cog"></i> Mi Perfil</h2><p style="margin:0.25rem 0 0;color:var(--theme-text-secondary);font-size:0.875rem;">Información de tu cuenta</p></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 2fr;gap:24px;">
+            <div class="chart-container" style="text-align:center;padding:2rem;">
+              <div style="width:100px;height:100px;border-radius:50%;background:var(--theme-primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:2.5rem;font-weight:700;margin:0 auto 1rem;" id="perfilAvatar">C</div>
+              <h3 id="perfilNombre" style="margin:0 0 0.25rem;">Cliente</h3>
+              <p id="perfilEmail" style="color:var(--theme-text-light);font-size:0.85rem;margin:0;">cliente@noova.com</p>
+            </div>
+            <div class="chart-container">
+              <h3>Información de la Cuenta</h3>
+              <div id="perfilInfo"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
+  <script>window.BASE_PATH = '../../../';</script>
+  <script src="../../../assets/js/theme.js"></script>
+  <script>
+    ThemeManager.init();
+
+    /* === BASE DE DATOS LOCAL === */
+    function db(key, val) {
+      if (val !== undefined) { localStorage.setItem('noova_' + key, JSON.stringify(val)); return val; }
+      try { return JSON.parse(localStorage.getItem('noova_' + key)); } catch { return null; }
+    }
+    function getUsers() { return db('users') || []; }
+    function getSolicitudes() { return db('solicitudes') || []; }
+    function getProyectos() { return db('proyectos') || []; }
+    function getNotifs() { return db('notificaciones') || []; }
+    function nextId(arr) { return arr.length ? Math.max.apply(null, arr.map(function(x) { return x.id; })) + 1 : 1; }
+    function setUsers(v) { db('users', v); }
+    function setSolicitudes(v) { db('solicitudes', v); }
+    function setProyectos(v) { db('proyectos', v); }
+    function setNotifs(v) { db('notificaciones', v); }
+
+    var currentUser = db('currentUser');
+    if (!currentUser) { window.location.href = '../'; }
+
+    var notifsNoLeidas = [];
+
+    function logout() {
+      db('currentUser', null);
+      window.location.href = '../';
+    }
+
+    function formatDate(d) {
+      if (!d) return '-';
+      var dt = new Date(d);
+      return dt.toLocaleDateString('es-PE', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    /* === SECTION SWITCHING === */
+    function showSection(name) {
+      document.querySelectorAll('.section-content').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.portal-sidebar-nav a[data-section]').forEach(function(a) { a.classList.remove('active'); });
+      var section = document.getElementById('section-' + name);
+      if (section) section.classList.add('active');
+      var link = document.querySelector('.portal-sidebar-nav a[data-section="' + name + '"]');
+      if (link) link.classList.add('active');
+      if (!section.dataset.loaded) { section.dataset.loaded = '1'; loaders[name] && loaders[name](); }
+    }
+
+    document.querySelectorAll('.portal-sidebar-nav a[data-section]').forEach(function(a) {
+      a.addEventListener('click', function(e) { e.preventDefault(); showSection(this.dataset.section); });
+    });
+
+    /* === LOADERS === */
+    var loaders = {};
+    var chartInstance = null;
+
+    loaders.dashboard = function() {
+      document.getElementById('clientName').textContent = currentUser.nombres || 'Cliente';
+
+      var proyectos = getProyectos().filter(function(p) { return p.cliente_email === currentUser.email; });
+      var activos = proyectos.filter(function(p) { return p.estado !== 'completado' && p.estado !== 'cancelado'; });
+      var completados = proyectos.filter(function(p) { return p.estado === 'completado'; });
+      var solicitudes = getSolicitudes().filter(function(s) { return s.cliente_email === currentUser.email; });
+      var pendientes = solicitudes.filter(function(s) { return s.estado === 'pendiente'; });
+      var notifs = getNotifs().filter(function(n) { return n.email === currentUser.email; });
+      var noLeidas = notifs.filter(function(n) { return !n.leida; });
+
+      document.getElementById('statsGrid').innerHTML =
+        '<div class="stat-card"><div class="stat-info"><h4>Proyectos Activos</h4><div class="stat-number">' + activos.length + '</div></div><div class="stat-icon"><i class="fas fa-rocket"></i></div></div>' +
+        '<div class="stat-card"><div class="stat-info"><h4>Proyectos Completados</h4><div class="stat-number">' + completados.length + '</div></div><div class="stat-icon"><i class="fas fa-check-circle"></i></div></div>' +
+        '<div class="stat-card"><div class="stat-info"><h4>Solicitudes Pendientes</h4><div class="stat-number">' + pendientes.length + '</div></div><div class="stat-icon"><i class="fas fa-clock"></i></div></div>' +
+        '<div class="stat-card"><div class="stat-info"><h4>No leídas</h4><div class="stat-number">' + noLeidas.length + '</div></div><div class="stat-icon"><i class="fas fa-bell"></i></div></div>';
+
+      // Chart
+      if (chartInstance) chartInstance.destroy();
+      var ctx = document.getElementById('clientChart');
+      if (ctx) {
+        var style = getComputedStyle(document.documentElement);
+        chartInstance = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Completados', 'Activos', 'Pendientes'],
+            datasets: [{
+              data: [completados.length, activos.length, pendientes.length],
+              backgroundColor: [style.getPropertyValue('--theme-chart-1').trim() || '#0a4b7a', '#1a7bc4', '#ffc107'],
+              borderWidth: 0, hoverOffset: 8
+            }]
+          },
+          options: { responsive: true, cutout: '65%', plugins: { legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true } } } }
+        });
+      }
+
+      // Recent notifs
+      var rn = document.getElementById('recentNotifs');
+      if (notifs.length) {
+        rn.innerHTML = notifs.slice(0, 4).map(function(n) {
+          return '<div class="notification' + (n.leida ? '' : ' notification-unread') + '"><div class="notification-icon" style="background:rgba(40,167,69,0.1);color:var(--theme-success);"><i class="fas fa-' + (n.tipo === 'solicitud' ? 'paper-plane' : n.tipo === 'proyecto' ? 'folder' : 'bell') + '"></i></div><div class="notification-content"><div class="notification-title">' + (n.titulo || 'Notificación') + '</div><div class="notification-text">' + (n.mensaje || '') + '</div><div class="notification-time">' + formatDate(n.created_at) + '</div></div></div>';
+        }).join('');
+      } else {
+        rn.innerHTML = '<div style="color:var(--theme-text-light);padding:1rem;text-align:center;">Sin notificaciones recientes</div>';
+      }
+
+      // Projects table
+      var tb = document.getElementById('dashboardProyTable');
+      if (proyectos.length) {
+        tb.innerHTML = proyectos.slice(0, 5).map(function(p) {
+          var badge = p.estado === 'completado' ? 'badge-completed' : p.estado === 'suspendido' ? 'badge-pending' : 'badge-active';
+          return '<tr><td><strong>' + (p.codigo || 'PRY-' + p.id) + '</strong></td><td>' + (p.nombre || 'Sin nombre') + '</td><td><span class="badge ' + badge + '">' + (p.estado || '-') + '</span></td><td><div class="progress"><div class="progress-bar" style="width:' + (p.progreso || 0) + '%;"></div></div><small style="color:var(--theme-text-light);">' + (p.progreso || 0) + '%</small></td><td>' + formatDate(p.fecha_inicio) + '</td></tr>';
+        }).join('');
+      } else {
+        tb.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--theme-text-light)">Sin proyectos registrados</td></tr>';
+      }
+    };
+
+    loaders.proyectos = function() {
+      var proyectos = getProyectos().filter(function(p) { return p.cliente_email === currentUser.email; });
+      var tb = document.getElementById('proyectosBody');
+      if (proyectos.length) {
+        tb.innerHTML = proyectos.map(function(p) {
+          var badge = p.estado === 'completado' ? 'badge-completed' : p.estado === 'suspendido' ? 'badge-pending' : 'badge-active';
+          var asesorName = '';
+          if (p.asesor_email) {
+            var asesor = getUsers().find(function(u) { return u.email === p.asesor_email; });
+            asesorName = asesor ? asesor.nombres + ' ' + asesor.apellidos : p.asesor_email;
+          }
+          return '<tr><td><strong>' + (p.codigo || 'PRY-' + p.id) + '</strong></td><td>' + (p.nombre || 'Sin nombre') + '</td><td><span class="badge ' + badge + '">' + (p.estado || '-') + '</span></td><td><div class="progress"><div class="progress-bar" style="width:' + (p.progreso || 0) + '%;"></div></div><small>' + (p.progreso || 0) + '%</small></td><td>' + (asesorName || '-') + '</td><td>' + formatDate(p.fecha_inicio) + '</td><td><button class="action-btn" onclick="alert(\'Proyecto: ' + (p.nombre || '') + '\')" title="Ver"><i class="fas fa-eye"></i></button></td></tr>';
+        }).join('');
+      } else {
+        tb.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--theme-text-light)">No hay proyectos</td></tr>';
+      }
+    };
+
+    loaders.solicitudes = function() {
+      // Load asesores
+      var sel = document.getElementById('asesorSelect');
+      var asesores = getUsers().filter(function(u) { return u.rol === 'asesor'; });
+      sel.innerHTML = '<option value="">Sin asesor específico</option>';
+      asesores.forEach(function(a) {
+        var opt = document.createElement('option');
+        opt.value = a.id;
+        opt.textContent = a.nombres + ' ' + a.apellidos + (a.especialidad ? ' - ' + a.especialidad : '');
+        sel.appendChild(opt);
+      });
+
+      cargarSolicitudes();
+    };
+
+    function enviarSolicitud(e) {
+      e.preventDefault();
+      var form = document.getElementById('solicitudForm');
+      var btn = document.getElementById('solicitudBtn');
+
+      var data = {
+        id: nextId(getSolicitudes()),
+        cliente_email: currentUser.email,
+        cliente_nombre: currentUser.nombres + ' ' + currentUser.apellidos,
+        razon_social: currentUser.razon_social || '',
+        ruc: currentUser.ruc || '',
+        tipo_proyecto: form.tipo_proyecto.value,
+        descripcion: form.descripcion.value,
+        asesor_id: form.asesor_id.value ? parseInt(form.asesor_id.value) : null,
+        estado: 'pendiente',
+        respuesta_asesor: '',
+        created_at: new Date().toISOString()
+      };
+
+      var sols = getSolicitudes();
+      sols.push(data);
+      setSolicitudes(sols);
+
+      showToast('Solicitud enviada correctamente');
+      form.reset();
+      cargarSolicitudes();
+
+      // Notify asesor
+      if (data.asesor_id) {
+        var asesor = getUsers().find(function(u) { return u.id === data.asesor_id; });
+        if (asesor) {
+          var notifs = getNotifs();
+          notifs.push({ id: nextId(notifs), email: asesor.email, tipo: 'solicitud', titulo: 'Nueva solicitud de proyecto', mensaje: currentUser.nombres + ' ' + currentUser.apellidos + ' te ha asignado una solicitud: ' + data.tipo_proyecto, leida: false, created_at: new Date().toISOString(), ref_id: data.id });
+          setNotifs(notifs);
+        }
+      }
+    }
+
+    function cargarSolicitudes() {
+      var sols = getSolicitudes().filter(function(s) { return s.cliente_email === currentUser.email; });
+      var div = document.getElementById('solicitudesList');
+      document.getElementById('solicitudesCount').textContent = '(' + sols.length + ')';
+
+      if (sols.length) {
+        div.innerHTML = sols.map(function(s) {
+          var icon = s.estado === 'aprobado' ? 'fa-check-circle' : s.estado === 'rechazado' ? 'fa-times-circle' : 'fa-clock';
+          var color = s.estado === 'aprobado' ? '#28a745' : s.estado === 'rechazado' ? '#dc3545' : '#ffc107';
+          var badge = s.estado === 'aprobado' ? 'badge-completed' : s.estado === 'rechazado' ? 'badge' : 'badge-active';
+          var asesorName = '';
+          if (s.asesor_id) {
+            var as = getUsers().find(function(u) { return u.id === s.asesor_id; });
+            asesorName = as ? as.nombres + ' ' + as.apellidos : '';
+          }
+          return '<div style="padding:16px;border:1px solid var(--theme-border);border-radius:12px;margin-bottom:10px;">' +
+            '<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">' +
+            '<i class="fas ' + icon + '" style="color:' + color + ';font-size:1.2rem;"></i>' +
+            '<strong style="text-transform:capitalize;">' + (s.tipo_proyecto || 'Proyecto') + '</strong>' +
+            '<span class="badge ' + badge + '">' + (s.estado || 'pendiente') + '</span></div>' +
+            (s.descripcion ? '<p style="margin:0 0 6px;color:var(--theme-text-secondary);font-size:0.85rem;">' + s.descripcion + '</p>' : '') +
+            (asesorName ? '<p style="margin:0;font-size:0.8rem;color:var(--theme-text-light);">Asesor: ' + asesorName + '</p>' : '') +
+            (s.respuesta_asesor ? '<div style="margin-top:8px;padding:8px 12px;background:var(--theme-surface);border-radius:8px;font-size:0.85rem;border-left:3px solid ' + color + ';"><strong>Respuesta:</strong> ' + s.respuesta_asesor + '</div>' : '') +
+            '<div style="margin-top:6px;font-size:0.75rem;color:var(--theme-text-light);">' + formatDate(s.created_at) + '</div></div>';
+        }).join('');
+      } else {
+        div.innerHTML = '<div style="color:var(--theme-text-light);padding:1rem;text-align:center;">No has realizado solicitudes aún</div>';
+      }
+    }
+
+    loaders.notificaciones = function() {
+      var notifs = getNotifs().filter(function(n) { return n.email === currentUser.email; });
+      var div = document.getElementById('notifListFull');
+      if (notifs.length) {
+        div.innerHTML = notifs.reverse().map(function(n) {
+          var unreadClass = n.leida ? '' : ' notification-unread';
+          return '<div class="notification' + unreadClass + '"><div class="notification-icon" style="background:rgba(10,75,122,0.1);color:var(--theme-primary);"><i class="fas fa-' + (n.tipo === 'solicitud' ? 'paper-plane' : 'folder') + '"></i></div><div class="notification-content"><div class="notification-title">' + (n.titulo || 'Notificación') + '</div><div class="notification-text">' + (n.mensaje || '') + '</div><div class="notification-time">' + formatDate(n.created_at) + '</div></div></div>';
+        }).join('');
+      } else {
+        div.innerHTML = '<div style="color:var(--theme-text-light);padding:1rem;text-align:center;">Sin notificaciones</div>';
+      }
+    };
+
+    loaders.perfil = function() {
+      document.getElementById('perfilAvatar').textContent = (currentUser.nombres || 'C')[0];
+      document.getElementById('perfilNombre').textContent = currentUser.nombres + ' ' + currentUser.apellidos;
+      document.getElementById('perfilEmail').textContent = currentUser.email;
+      document.getElementById('perfilInfo').innerHTML =
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><div><strong>Nombres:</strong><br>' + (currentUser.nombres || '-') + '</div>' +
+        '<div><strong>Apellidos:</strong><br>' + (currentUser.apellidos || '-') + '</div>' +
+        '<div><strong>Email:</strong><br>' + (currentUser.email || '-') + '</div>' +
+        '<div><strong>Teléfono:</strong><br>' + (currentUser.telefono || '-') + '</div>' +
+        '<div><strong>Razón Social:</strong><br>' + (currentUser.razon_social || '-') + '</div>' +
+        '<div><strong>RUC:</strong><br>' + (currentUser.ruc || '-') + '</div></div>';
+    };
+
+    function showToast(msg, type) {
+      var c = document.getElementById('toast-container') || (function() {
+        var d = document.createElement('div'); d.id = 'toast-container'; d.style.cssText = 'position:fixed;top:80px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;'; document.body.appendChild(d); return d;
+      })();
+      var t = document.createElement('div');
+      t.style.cssText = 'padding:14px 20px;border-radius:12px;background:var(--theme-card-bg,#fff);color:var(--theme-text,#333);box-shadow:0 8px 32px rgba(0,0,0,0.12);border-left:4px solid ' + (type === 'error' ? '#dc3545' : '#28a745') + ';display:flex;align-items:center;gap:10px;font-size:14px;min-width:280px;border:1px solid var(--theme-border,#e0e0e0);animation:fadeInUp .3s ease;';
+      t.innerHTML = '<i class="fas fa-' + (type === 'error' ? 'exclamation-circle' : 'check-circle') + '" style="color:' + (type === 'error' ? '#dc3545' : '#28a745') + '"></i> ' + msg;
+      c.appendChild(t);
+      setTimeout(function() { t.style.opacity = '0'; setTimeout(function() { t.remove(); }, 300); }, 4000);
+    }
+
+    /* === INIT === */
+    showSection('dashboard');
+  </script>
+</body>
+</html>
